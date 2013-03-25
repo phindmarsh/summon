@@ -143,15 +143,16 @@ class Summon {
 
 
         $fetched = array();
+        $self = get_class();
 
         $batch = BatchBuilder::factory()
             ->transferRequests(10)
             ->autoFlushAt(10)
-            ->notify(function($transferred) use (&$fetched) {
+            ->notify(function($transferred) use (&$fetched, $self) {
                 /** @var Request[] $transferred */
                 foreach($transferred as $request){
                     $length = $request->getResponse()->getContentLength();
-                    if($length < self::MIN_FILESIZE) continue;
+                    if($length < $self::MIN_FILESIZE) continue;
 
                     $img_data = @getimagesize($request->getResponse()->getBody()->getUri());
                     if(!is_array($img_data)) continue;
@@ -165,8 +166,8 @@ class Summon {
                         'area' => $img_data[0] * $img_data[1]
                     );
 
-                    $image['aspect'] = ($image['ratio'] > self::MIN_RATIO
-                        && $image['ratio'] < self::MAX_RATIO);
+                    $image['aspect'] = ($image['ratio'] > $self::MIN_RATIO
+                        && $image['ratio'] < $self::MAX_RATIO);
 
                     $fetched[] = $image;
                 }
