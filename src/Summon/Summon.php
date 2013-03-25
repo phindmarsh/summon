@@ -1,6 +1,6 @@
 <?php
 
-namespace Helpers;
+namespace Summon;
 
 use Guzzle\Http\Client,
     Guzzle\Http\Message\Response,
