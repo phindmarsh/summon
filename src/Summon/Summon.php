@@ -83,11 +83,7 @@ class Summon {
         }
         catch(ClientErrorResponseException $e){
             // HEAD method is not allowed, try GET instead
-            if($e->getResponse()->getStatusCode() === 405){
-                $response = $this->client->get()->send();
-            }
-            else throw $e;
-
+            $response = $this->client->get()->send();
         }
 
         // update the url to the actual endpoint (after redirects)
