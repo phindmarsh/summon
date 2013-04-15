@@ -148,7 +148,7 @@ class Summon {
                 /** @var Request[] $transferred */
                 foreach($transferred as $request){
                     $length = $request->getResponse()->getContentLength();
-                    if($length < $self::MIN_FILESIZE) continue;
+                    if($request->getResponse()->hasHeader('content-length') && $length < $self::MIN_FILESIZE) continue;
 
                     $img_data = @getimagesize($request->getResponse()->getBody()->getUri());
                     if(!is_array($img_data)) continue;
