@@ -122,11 +122,13 @@ class Summon {
 
     /** @noinspection PhpUnusedPrivateMethodInspection */
     private function parseHtml(Response $response){
-        if($response->getRequest()->getMethod() === Request::HEAD)
-            $response = $this->client->get()->send();
 
-        $entity_body = $response->getBody();
         $images = array();
+        $entity_body = $response->getBody();
+        if($entity_body->getContentLength() <= 0){
+            $response = $this->client->get()->send();
+            $entity_body = $response->getBody();
+        }
 
         if($entity_body->getContentLength() <= 0)
             throw new SummonException("Could not read remote source");
