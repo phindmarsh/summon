@@ -144,7 +144,7 @@ class Summon {
         $self = get_class();
 
         $batch = BatchBuilder::factory()
-            ->transferRequests(10)
+            ->transferRequests(1)
             ->autoFlushAt(10)
             ->notify(function($transferred) use (&$fetched, $self) {
                 /** @var Request[] $transferred */
