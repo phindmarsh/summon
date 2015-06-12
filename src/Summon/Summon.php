@@ -139,7 +139,31 @@ class Summon {
         $doc->loadHTML($entity_body->__toString());
         libxml_clear_errors();
 
+        $meta = $this->findImageInMeta($doc);
+        if($meta !== null){
+            $images[] = $meta;
+        }
+        else {
+            $images = $this->findImagesInHtml($doc);
+        }
 
+        return $this->formatResponse($images);
+
+    }
+
+    private function findImageInMeta(DOMDocument $doc){
+
+        foreach ($doc->getElementsByTagName('meta') as $meta) {
+            if($meta->getAttribute('property') === 'og:image'){
+                return self::resolveUrl($this->url, $meta->getAttribute('content'));
+            }
+        }
+
+        return null;
+
+    }
+
+    private function findImagesInHtml(DOMDocument $doc){
         $fetched = array();
         $self = get_class();
 
@@ -208,7 +232,8 @@ class Summon {
             }
         }
 
-        return $this->formatResponse($filtered);
+        return $filtered;
+
     }
 
     /**
